@@ -31,8 +31,76 @@ class RssBlogPostsPage_Controller extends Page_Controller {
 	public function init() {
 		parent::init();
 	}
-		
-	function RSSEvents($numItems = 30, $feedURL="http://hulk.imu.uiowa.edu/afterclass_dev/events/newrss/") {
+function RSSEvents($numItems = 30, $feedURL="http://hulk.imu.uiowa.edu/afterclass_dev/events/newrss/") {
+			// echo "1";return new DataObjectSet();
+			
+			$output = new DataObjectSet();
+			$output->setPageLength(3);
+			include_once('simplepie/simplepie.inc');
+			$t1 = microtime(true);
+			$feed = new SimplePie($feedURL, TEMP_FOLDER);
+			$feed->enable_order_by_date(false);
+			$feed->enable_cache(false);
+			$feed->init();
+			$feed->get_items(0, $numItems);
+			
+			if($items = $feed->get_items(0, $numItems)) {
+		  	
+			foreach($items as $item) {
+			 	//do we need the simplepie rss2 namespace? test it. --actually... it isn't needed? idk why.
+			 	//$custom_fields = $item->get_item_tags(SIMPLEPIE_NAMESPACE_RSS_20,'custom_fields');
+			 	$custom_fields = $item->get_item_tags(null,'custom_fields');
+				
+				// Cast the Date
+				//$date = new Date('Date');
+				//$date->setValue($item->get_date());
+				
+				// Cast the Title
+				$title = new Text('Title');
+				$title->setValue($item->get_title());
+				
+				$dates = new Text('Dates');
+				$dates->setValue($item->get_item_tags(null,'dates'));
+				$dates->setValue($dates->value[0]['data']);
+				
+				$cost = new Text('Cost');
+				$cost->setValue($item->get_item_tags(null,'cost'));
+				$cost->setValue($cost->value[0]['data']);
+				
+				$location = new Text('Location');
+				$location->setValue($item->get_item_tags(null,'location'));
+				$location->setValue($location->value[0]['data']);
+				
+				$description = new Text('Description');
+				$description->setValue($item->get_item_tags(null,'description'));
+				$description->setValue(strip_tags(html_entity_decode($description->value[0]['data'])));
+				
+				$smallimage = new Text('Smallimage');
+				$smallimage->setValue($item->get_item_tags(null,'smallimage'));
+				$smallimage->setValue($smallimage->value[0]['data']);
+				
+				if(isset($item_author)){
+					$author->setValue($item_author->get_name());}
+				
+				// Cast the description and strip
+				$desc = new HTMLText('Description');
+				$desc->setValue(strip_tags($item->get_description()));
+				
+				$output->push(new ArrayData(array(
+				   'Title'		=> $title,
+				   'Dates'		=> $dates,
+				   'Cost'		=> $cost,
+				   'Location'	=> $location,
+				   'Description'=> $description,
+				   'Smallimage' => $smallimage,
+				   'Link'		=> $item->get_link()
+				)));
+			 }
+			
+			 return $output;
+		  } 
+		}//end function RSSEvents()		
+	/*function RSSEvents($numItems = 30, $feedURL="http://afterclass.uiowa.edu/rss/") {
 		
 			$output = new DataObjectSet();
 			$output->setPageLength(3);
@@ -76,45 +144,7 @@ class RssBlogPostsPage_Controller extends Page_Controller {
 				
 				// Cast the description and strip
 				$desc = new HTMLText('Description');
-				$desc->setValue(strip_tags($item->get_description()));
-				
-				/*if(isset($custom_fields[0]['child']['']['EventCost'][0]['data'])){
-					$cost = new Text('Cost');
-					$cost->setValue(strip_tags($custom_fields[0]['child']['']['EventCost'][0]['data']));
-				}else{ 
-					$cost = null;
-				}
-				
-				if(isset($custom_fields[0]['child']['']['EventDate'][0]['data'])){
-					$event_date = new Text('EventDate');
-					$event_date->setValue(strip_tags($custom_fields[0]['child']['']['EventDate'][0]['data']));
-				}else{
-					$event_date = null;
-				}
-				
-				if(isset($custom_fields[0]['child']['']['EventLocation'][0]['data'])){
-					$location = new Text('EventLocation');
-					$location->setValue(strip_tags($custom_fields[0]['child']['']['EventLocation'][0]['data']));
-				}else{
-					$location = null;
-				}
-				if($thumbnail_enclosure = $item->get_enclosure()){
-					//Thumbnail
-					$thumbnail_url = new Text('ImageURL');
-					$thumbnail_url->setValue($thumbnail_enclosure->link);
-				}else{
-					$thumbnail_url = null;
-				}
-				
-				,
-				   'Description'   => $desc,
-				   'Cost' => $cost,
-				   'EventDate' => $event_date,
-				   "Location" => $location,
-				   "ImageURL" => $thumbnail_url
-				
-				*/
-				
+				$desc->setValue( htmlspecialchars ($item->get_description()));
 				
 				$output->push(new ArrayData(array(
 				   'Title'		=> $title,
@@ -128,5 +158,5 @@ class RssBlogPostsPage_Controller extends Page_Controller {
 			 return $output;
 		  } 
 		}//end function HomeEventItems()
-
+*/
 }
