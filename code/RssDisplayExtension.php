@@ -18,7 +18,7 @@ class RssDisplayExtension extends Extension{
 	 * @var array
 	 */
 
-	public function RSSDisplay($numItems = 30, $feedURL="http://hulk.imu.uiowa.edu/afterclass_dev/events/newrss/") {
+	public function RSSDisplay($numItems = 30, $feedURL="http://afterclass.uiowa.edu/rss") {
 		
 			$output = new DataObjectSet();
 			$output->setPageLength(3);
