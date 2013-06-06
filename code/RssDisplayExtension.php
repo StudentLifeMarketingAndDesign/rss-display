@@ -43,7 +43,7 @@ class RssDisplayExtension extends DataExtension{
 		
 				// Cast the Title
 				$title = new Text('Title');
-				$title->setValue($item->get_title());
+				$title->setValue(html_entity_decode($item->get_title()));
 				
 				$author = new Text('Author');
 				$item_author = $item->get_author();
