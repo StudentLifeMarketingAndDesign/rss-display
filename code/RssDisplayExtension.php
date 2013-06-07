@@ -40,7 +40,19 @@ class RssDisplayExtension extends DataExtension{
 				// Cast the Date
 				$date = new Date('Date');
 				$date->setValue($item->get_date());
-		
+				
+				$dates = new Text('Dates');
+				$dates->setValue($item->get_item_tags(null,'dates'));
+				$dates->setValue($dates->value[0]['data']);
+				
+				$cost = new Text('Cost');
+				$cost->setValue($item->get_item_tags(null,'cost'));
+				$cost->setValue($cost->value[0]['data']);
+				
+				$location = new Text('Location');
+				$location->setValue($item->get_item_tags(null,'location'));
+				$location->setValue($location->value[0]['data']);
+				
 				// Cast the Title
 				$title = new Text('Title');
 				$title->setValue(html_entity_decode($item->get_title()));
@@ -90,6 +102,9 @@ class RssDisplayExtension extends DataExtension{
 				   'Title'         => $title,
 				   'Author'       =>$author,
 				   'Date'         => $date,
+				   'Dates'		=> $dates,
+				   'Cost'		=> $cost,
+				   'Location'	=> $location,
 				   'Link'         => $item->get_link(),
 				   'Description'   => $desc,
 				   'Cost' => $cost,
