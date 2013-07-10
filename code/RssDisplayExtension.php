@@ -55,7 +55,7 @@ class RssDisplayExtension extends Extension{
 				$pubDate->setValue($item->get_date());
 				
 				$text = new Text('Content');
-				$text->setValue(htmlspecialchars($item->get_description(), ENT_QUOTES));
+				$text->setValue(strip_tags($item->get_description()));
 				
 				$cost = new Text('Cost');
 				$cost->setValue($item->get_item_tags(null,'cost'));
