@@ -17,7 +17,29 @@ class RssDisplayExtension extends Extension{
 	 *
 	 * @var array
 	 */
+	 
+	public function superentities( $str ){
+    // get rid of existing entities else double-escape
+    $str = html_entity_decode(stripslashes($str),ENT_QUOTES,'UTF-8'); 
+    $ar = preg_split('/(?<!^)(?!$)/u', $str );  // return array of every multi-byte character
+    foreach ($ar as $c){
+        $o = ord($c);
+        if ( (strlen($c) > 1) || /* multi-byte [unicode] */
+            ($o <32 || $o > 126) || /* <- control / latin weirdos -> */
+            ($o >33 && $o < 40) ||/* quotes + ambersand */
+            ($o >59 && $o < 63) /* html */
+        ) {
+            // convert to numeric entity
+            $c = mb_encode_numericentity($c,array (0x0, 0xffff, 0, 0xffff), 'UTF-8');
+        }
+        $str2 .= $c;
+    }
+    return $str2;
+}
 
+	function Unaccent($string){
+    return preg_replace('~&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i', '$1', htmlentities($string, ENT_QUOTES, 'UTF-8'));
+	}
 	public function RSSDisplay($numItems = 30, $feedURL="http://afterclass.uiowa.edu/rss") {
 		
 			$output = new DataObjectSet();
@@ -55,7 +77,7 @@ class RssDisplayExtension extends Extension{
 				$pubDate->setValue($item->get_date());
 				
 				$text = new Text('Content');
-				$text->setValue(strip_tags($item->get_description()));
+				$text->setValue($this->Unaccent(strip_tags(html_entity_decode($item->get_description()))));
 				
 				$cost = new Text('Cost');
 				$cost->setValue($item->get_item_tags(null,'cost'));
