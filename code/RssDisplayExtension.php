@@ -67,27 +67,6 @@ class RssDisplayExtension extends DataExtension{
 				$desc = new HTMLText('Description');
 				$desc->setValue(strip_tags($item->get_description()));
 								
-				if(isset($custom_fields[0]['child']['']['EventCost'][0]['data'])){
-					$cost = new Text('Cost');
-					$cost->setValue(strip_tags($custom_fields[0]['child']['']['EventCost'][0]['data']));
-				}else{ 
-					$cost = null;
-				}
-				
-				if(isset($custom_fields[0]['child']['']['EventDate'][0]['data'])){
-					$event_date = new Text('EventDate');
-					$event_date->setValue(strip_tags($custom_fields[0]['child']['']['EventDate'][0]['data']));
-				}else{
-					$event_date = null;
-				}
-				
-				if(isset($custom_fields[0]['child']['']['EventLocation'][0]['data'])){
-					$location = new Text('EventLocation');
-					$location->setValue(strip_tags($custom_fields[0]['child']['']['EventLocation'][0]['data']));
-				}else{
-					$location = null;
-				}
-				
 				if($thumbnail_enclosure = $item->get_enclosure()){
 				
 					//Thumbnail
