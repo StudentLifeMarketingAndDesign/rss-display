@@ -52,7 +52,11 @@ class RssDisplayExtension extends DataExtension{
 				$location = new Text('Location');
 				$location->setValue($item->get_item_tags(null,'location'));
 				$location->setValue($location->value[0]['data']);
-				
+
+				$image = new Text('ImageURL');
+				$image->setValue($item->get_item_tags(null,'image'));
+				$image->setValue($image->value[0]['data']);	
+
 				$smallimage = new Text('Smallimage');
 				$smallimage->setValue($item->get_item_tags(null,'smallimage'));
 				$smallimage->setValue($smallimage->value[0]['data']);
@@ -73,7 +77,6 @@ class RssDisplayExtension extends DataExtension{
 				$desc->setValue(strip_tags($item->get_description()));
 								
 				if($thumbnail_enclosure = $item->get_enclosure()){
-				
 					//Thumbnail
 					$thumbnail_url = new Text('ImageURL');
 					$thumbnail_url->setValue($thumbnail_enclosure->link);
@@ -94,7 +97,7 @@ class RssDisplayExtension extends DataExtension{
 				   'Cost' => $cost,
 				   "Location" => $location,
 				   'Smallimage' => $smallimage,
-				   "ImageURL" => $thumbnail_url
+				   "ImageURL" => $image
 				)));
 			 }
 			
