@@ -78,7 +78,7 @@ class RssDisplayExtension extends DataExtension{
 								
 				if($thumbnail_enclosure = $item->get_enclosure()){
 					//Thumbnail
-					$thumbnail_url = new Text('ImageURL');
+					$thumbnail_url = new Text('ThumbnailURL');
 					$thumbnail_url->setValue($thumbnail_enclosure->link);
 				}else{
 					$thumbnail_url = null;
@@ -97,7 +97,8 @@ class RssDisplayExtension extends DataExtension{
 				   'Cost' => $cost,
 				   "Location" => $location,
 				   'Smallimage' => $smallimage,
-				   "ImageURL" => $image
+				   "ImageURL" => $image,
+				   "ThumbnailURL" => $thumbnail_url
 				)));
 			 }
 			
