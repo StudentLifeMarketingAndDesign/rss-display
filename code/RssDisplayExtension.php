@@ -37,6 +37,11 @@ class RssDisplayExtension extends DataExtension {
 				if ($thumbnail_enclosure = $item->get_enclosure()) {
 					$thumbnail_url = new Text('ThumbnailURL');
 					$thumbnail_url->setValue($thumbnail_enclosure->get_thumbnail());
+
+					//legacy enclosure stuff for older sites like CSIL:
+					$thumbnail_alt_url = new Text('ThumbnailAltURL');
+					$thumbnail_alt_url->setValue($thumbnail_enclosure->link);
+
 				} else {
 					$thumbnail_url = null;
 
@@ -48,7 +53,8 @@ class RssDisplayExtension extends DataExtension {
 					'Date' => $date,
 					'Link' => $item->get_link(),
 					'Description' => $desc,
-					"ThumbnailURL" => $thumbnail_url,
+					'ThumbnailURL' => $thumbnail_url,
+					'ThumbnailAltURL' => $thumbnail_alt_url,
 				)));
 			}
 
