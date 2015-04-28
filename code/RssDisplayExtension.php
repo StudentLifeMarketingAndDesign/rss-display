@@ -49,6 +49,7 @@ class RssDisplayExtension extends DataExtension {
 
 				$output->push(new ArrayData(array(
 					'Title' => $title,
+					'MenuTitle' => $title,
 					'Author' => $author,
 					'Date' => $date,
 					'Link' => $item->get_link(),
@@ -61,6 +62,6 @@ class RssDisplayExtension extends DataExtension {
 			return $output;
 		}
 
-	}//end function HomeEventItems()
+	} //end function HomeEventItems()
 
 }
