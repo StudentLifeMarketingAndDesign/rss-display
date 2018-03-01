@@ -1,7 +1,7 @@
 <?php
 class RssDisplayExtension extends DataExtension {
 
-	public function RSSDisplay($numItems = 30, $feedURL = "feed://afterclass.uiowa.edu/events/") {
+	public function RSSDisplay($numItems = 5, $feedURL = "https://now.uiowa.edu/taxonomy/term/18914/feed") {
 
 		$output = new ArrayList();
 
